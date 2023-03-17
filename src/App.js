@@ -3,6 +3,7 @@ import Blog from './components/Blog';
 import Notification from './components/Notification';
 import blogService from './services/blogs';
 import loginService from './services/login';
+import localStorage from './services/localStorage';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -11,10 +12,19 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [user, setUser] = useState(null);
 
+  // get all blogs
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     );
+  }, []);
+
+  // check for logged in user
+  useEffect(() => {
+    const user = localStorage.getUser();
+    if (user) {
+      setUser(user);
+    }
   }, []);
 
   const handleLogin = async (event) => {
@@ -26,6 +36,8 @@ const App = () => {
         username, password,
       });
 
+      localStorage.setUser(user);
+
       setUser(user);
       setUsername('');
       setPassword('');
@@ -33,8 +45,15 @@ const App = () => {
       setErrorMessage('Wrong credentials');
       setTimeout(() => {
         setErrorMessage(null);
-      }, 5000);
+      }, 3000);
     }
+  };
+
+  const handleLogout = async (event) => {
+    event.preventDefault();
+    console.log('logging out with', username, password);
+    setUser(null);
+    localStorage.removeUser();
   };
 
   const blogList = () => (
@@ -68,10 +87,18 @@ const App = () => {
       <button type="submit">login</button>
     </form>
   );
+
+  const logoutForm = () => (
+    <form onSubmit={handleLogout}>
+      <button type="submit">logout</button>
+    </form>
+  );
+
   return (
     <div>
       { errorMessage && <Notification message={errorMessage} isErrorMessage={true} /> }
       { user === null && loginForm() }
+      { user !== null && logoutForm() }
       { user && <div>
         <p>{user.name} logged in</p>
       </div>
