@@ -7,6 +7,9 @@ import localStorage from './services/localStorage';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
+  const [newBlogTitle, setTitle] = useState([]);
+  const [newBlogAuthor, setAuthor] = useState([]);
+  const [newBlogUrl, setUrl] = useState([]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
@@ -27,6 +30,35 @@ const App = () => {
     }
   }, []);
 
+  const handleAddNewBlog = async (event) => {
+    event.preventDefault();
+    console.log('adding new blog');
+
+    const blogToCreate = {
+      title: newBlogTitle,
+      author: newBlogAuthor,
+      url: newBlogUrl,
+      likes: 0
+    };
+
+    try {
+      await blogService.addNewBlog(blogToCreate);
+
+      setTitle('');
+      setAuthor('');
+      setUrl('');
+      setErrorMessage(`A new blog ${blogToCreate.title} by ${blogToCreate.author} added`);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 2000);
+    } catch (error) {
+      setErrorMessage('Adding new blog failed..');
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 2000);
+    }
+  };
+
   const handleLogin = async (event) => {
     event.preventDefault();
     console.log('logging in with', username, password);
@@ -37,7 +69,7 @@ const App = () => {
       });
 
       localStorage.setUser(user);
-
+      blogService.setToken(user.token); // save token for service to use
       setUser(user);
       setUsername('');
       setPassword('');
@@ -45,7 +77,7 @@ const App = () => {
       setErrorMessage('Wrong credentials');
       setTimeout(() => {
         setErrorMessage(null);
-      }, 3000);
+      }, 2000);
     }
   };
 
@@ -64,8 +96,47 @@ const App = () => {
     </div>
   );
 
+  const addNewBlog = () => (
+    <form onSubmit={handleAddNewBlog}>
+      <div>Create new</div>
+      <div>
+        Title
+        <input
+          type="text"
+          value={newBlogTitle}
+          name="BlogTitle"
+          onChange={({ target }) => setTitle(target.value)}
+        />
+      </div>
+      <div>
+        Author
+        <input
+          type="text"
+          value={newBlogAuthor}
+          name="BlogAuthor"
+          onChange={({ target }) => setAuthor(target.value)}
+        />
+      </div>
+      <div>
+        Url
+        <input
+          type="text"
+          value={newBlogUrl}
+          name="BlogUrl"
+          onChange={({ target }) => setUrl(target.value)}
+        />
+      </div>
+      <button type="submit">add</button>
+      <br></br>
+      <br></br>
+    </form>
+  );
+
   const loginForm = () => (
     <form onSubmit={handleLogin}>
+      <div
+        login to application
+      ></div>
       <div>
         username
         <input
@@ -105,7 +176,7 @@ const App = () => {
       }
 
       <h2>Blogs</h2>
-
+      { user !== null && addNewBlog() }
       { user !== null && blogList() }
     </div>
   );
