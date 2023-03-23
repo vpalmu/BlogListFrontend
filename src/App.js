@@ -94,9 +94,11 @@ const App = () => {
 
   const blogList = () => (
     <div>
-      { blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
+      <ul>
+        { blogs.map(blog =>
+          <li><Blog key={blog.id} blog={blog} /></li>
+        )}
+      </ul>
     </div>
   );
 
@@ -147,15 +149,13 @@ const App = () => {
     <div>
       { errorMessage && <Notification message={errorMessage} isErrorMessage={true} /> }
       { user === null && loginForm() }
-      { user !== null && logoutForm() }
-      { user && <div>
-        <p>{user.name} logged in</p>
-      </div>
-      }
+
+      { user && <p>{user.name} logged in</p> }
+      { user && logoutForm() }
 
       <h2>Blogs</h2>
       { user !== null && addNewBlog() }
-      { user !== null && blogList() }
+      { blogList() }
     </div>
   );
 };
