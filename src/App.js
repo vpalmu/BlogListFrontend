@@ -103,7 +103,7 @@ const App = () => {
   );
 
   const addNewBlog = () => (
-    <Togglable buttonLabel='new blog'>
+    <Togglable toggleOnButtonLabel='new blog' toggleOffButtonLabel='cancel'>
       <BlogForm
         onSubmit={handleAddNewBlog}
         blogTitle={newBlogTitle}
