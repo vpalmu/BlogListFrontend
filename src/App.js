@@ -130,17 +130,20 @@ const App = () => {
   );
 
   const logoutForm = () => (
-    <form onSubmit={handleLogout}>
-      <button type="submit">logout</button>
-    </form>
+    <div>
+      <p>{user.name} logged in</p>
+      <form onSubmit={handleLogout}>
+        <button type="submit">logout</button>
+      </form>
+    </div>
   );
 
   return (
     <div>
+      <h2>Blog list app</h2>
       { errorMessage && <Notification message={errorMessage} isErrorMessage={true} /> }
       { user === null && loginForm() }
 
-      { user && <p>{user.name} logged in</p> }
       { user && logoutForm() }
 
       <h2>Blogs</h2>
