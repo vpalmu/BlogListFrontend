@@ -5,7 +5,6 @@ import BlogForm from './components/BlogForm';
 import Togglable from './components/Toggleable';
 import LoginForm from './components/LoginForm';
 import blogService from './services/blogs';
-import loginService from './services/login';
 import localStorage from './services/localStorage';
 
 const App = () => {
@@ -30,29 +29,6 @@ const App = () => {
     }
   }, []);
 
-
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    console.log('logging in with', username, password);
-
-    try {
-      const user = await loginService.login({
-        username, password,
-      });
-
-      localStorage.setUser(user);
-      blogService.setToken(user.token); // save token for service to use
-      setUser(user);
-      setUsername('');
-      setPassword('');
-    } catch (exception) {
-      setErrorMessage('Wrong credentials');
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 2000);
-    }
-  };
-
   const handleLogout = async (event) => {
     event.preventDefault();
     console.log('logging out with', username, password);
@@ -76,9 +52,10 @@ const App = () => {
         <LoginForm
           username={username}
           password={password}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handleUserNameChange={({ target }) => setUsername(target.value)}
           handlePasswordChange={({ target }) => setPassword(target.value)}
-          handleSubmit={handleLogin}
+          handleUserChange={setUser}
+          setMessageCallback={setErrorMessage}
         />
       </div>
     </Togglable>
@@ -98,14 +75,14 @@ const App = () => {
       <h2>Blog list app</h2>
       { errorMessage && <Notification message={errorMessage} isErrorMessage={true} /> }
       { user === null && loginForm() }
-
       { user && logoutForm() }
 
-      <h2>Blogs</h2>
       { user !== null &&
         <Togglable toggleOnButtonLabel='new blog' toggleOffButtonLabel='cancel'>
           <BlogForm setMessageCallback={setErrorMessage}/>
-        </Togglable> }
+        </Togglable>
+      }
+      <h2>Blogs</h2>
       { blogList() }
     </div>
   );
