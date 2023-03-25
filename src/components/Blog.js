@@ -13,6 +13,7 @@ const Blog = ({ blog }) => {
       <p>Likes: { blog.likes } </p>
       <p>Url: { blog.url } </p>
       <p>Author: { blog.author } </p>
+      { blog.user && <p>Added by: { blog.user.name }</p> }
       <button onClick={toggleVisibility}>hide</button>
     </div>
   );
