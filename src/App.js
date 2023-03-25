@@ -10,9 +10,6 @@ import localStorage from './services/localStorage';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [newBlogTitle, setTitle] = useState([]);
-  const [newBlogAuthor, setAuthor] = useState([]);
-  const [newBlogUrl, setUrl] = useState([]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
@@ -33,34 +30,6 @@ const App = () => {
     }
   }, []);
 
-  const handleAddNewBlog = async (event) => {
-    event.preventDefault();
-    console.log('adding new blog');
-
-    const blogToCreate = {
-      title: newBlogTitle,
-      author: newBlogAuthor,
-      url: newBlogUrl,
-      likes: 0
-    };
-
-    try {
-      await blogService.addNewBlog(blogToCreate);
-
-      setTitle('');
-      setAuthor('');
-      setUrl('');
-      setErrorMessage(`A new blog ${blogToCreate.title} by ${blogToCreate.author} added`);
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 2000);
-    } catch (error) {
-      setErrorMessage('Adding new blog failed..');
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 2000);
-    }
-  };
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -101,20 +70,6 @@ const App = () => {
     </div>
   );
 
-  const addNewBlog = () => (
-    <Togglable toggleOnButtonLabel='new blog' toggleOffButtonLabel='cancel'>
-      <BlogForm
-        onSubmit={handleAddNewBlog}
-        blogTitle={newBlogTitle}
-        handleBlogTitleChange={(target) => { setAuthor(target.value);}}
-        blogAuthor={newBlogAuthor}
-        handleBlogAuthorChange={(target) => { setAuthor(target.value);}}
-        blogUrl={newBlogUrl}
-        handleBlogUrlChange={(target) => { setUrl(target.value);}}
-      />
-    </Togglable>
-  );
-
   const loginForm = () => (
     <Togglable toggleOnButtonLabel='Log in' toggleOffButtonLabel='Cancel'>
       <div>
@@ -147,7 +102,10 @@ const App = () => {
       { user && logoutForm() }
 
       <h2>Blogs</h2>
-      { user !== null && addNewBlog() }
+      { user !== null &&
+        <Togglable toggleOnButtonLabel='new blog' toggleOffButtonLabel='cancel'>
+          <BlogForm setMessageCallback={setErrorMessage}/>
+        </Togglable> }
       { blogList() }
     </div>
   );
