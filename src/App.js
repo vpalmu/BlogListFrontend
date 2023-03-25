@@ -64,7 +64,7 @@ const App = () => {
     <div>
       <ul>
         { blogs.map(blog =>
-          <li><Blog key={blog.id} blog={blog} /></li>
+          <li key={blog.id}><Blog blog={blog} /></li>
         )}
       </ul>
     </div>
