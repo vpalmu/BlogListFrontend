@@ -28,9 +28,11 @@ const BlogForm = ({ setMessageCallback }) => {
       setAuthor('');
       setUrl('');
       showMessage(`A new blog ${blogToCreate.title} by ${blogToCreate.author} added`);
+
       setTimeout(() => {
         showMessage(null);
       }, 2000);
+      window.location.reload(); // refresh the page
     } catch (error) {
       showMessage('Adding new blog failed..');
       setTimeout(() => {
