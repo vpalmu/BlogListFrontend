@@ -32,5 +32,13 @@ const addNewBlog = newBlog => {
   return request.then(response => response.data);
 };
 
+const updateBlog = blogToUpdate => {
+  const resourceUrl = `${baseUrl}/${blogToUpdate.id}`;
+  console.log('resourceUrl:', resourceUrl);
+
+  const request = axios.put(resourceUrl, blogToUpdate);
+  return request.then(response => response.data);
+};
+
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, addNewBlog, setToken, deleteBlog };
+export default { getAll, addNewBlog, setToken, deleteBlog, updateBlog };

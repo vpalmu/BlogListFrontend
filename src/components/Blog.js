@@ -33,12 +33,24 @@ const Blog = ({ blog }) => {
     }
   };
 
+  const likeButtonHandler = async (blog) => {
+    console.log(`adding one like to blog: ${blog.title}`);
+
+    try {
+      blog.likes += 1;
+      blogService.updateBlog(blog);
+      window.location.reload(); // refresh the page
+    } catch (exception) {
+      console.log(exception);
+    }
+  };
+
   const showDetails = () => (
     <div className='details'>
       <p>Id: { blog.id } </p>
-      <p>Likes: { blog.likes } </p>
+      <p>Likes: { blog.likes }  <button onClick={() => likeButtonHandler(blog)}>Like</button></p>
       <p>Url: { blog.url } </p>
-      <p>Author: { blog.author } </p>
+      <p>Author: { blog.author }</p>
       { blog.user && <p>Added by: { blog.user.name }</p> }
       { canDeleteBlog && <button onClick={() => deleteButtonClickHandler(blog)}>Delete</button> }
       <button onClick={toggleVisibility}>Close</button>
