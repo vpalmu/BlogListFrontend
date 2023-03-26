@@ -10,6 +10,14 @@
             "name": "Launch Chrome against localhost",
             "url": "http://localhost:3001",
             "webRoot": "${workspaceFolder}"
+        },
+        {
+            "name": "Attach to Chrome",
+            "port": 9222,
+            "request": "attach",
+            "type": "chrome",
+            "urlFilter": "http://localhost:3001/*", // use urlFilter instead of url!
+            "webRoot": "${workspaceFolder}"
         }
     ]
 }
