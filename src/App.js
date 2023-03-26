@@ -26,6 +26,7 @@ const App = () => {
     const user = localStorage.getUser();
     if (user) {
       setUser(user);
+      blogService.setToken(user.token); // save token for service to use
     }
   }, []);
 
