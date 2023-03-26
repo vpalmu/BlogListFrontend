@@ -12,6 +12,17 @@ const getAll = () => {
   return request.then(response => response.data);
 };
 
+const deleteBlog = blogId => {
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  const resourceUrl = `${baseUrl}/${blogId}`;
+  console.log('resourceUrl:', resourceUrl);
+  const request = axios.delete(resourceUrl, config);
+  return request.then(response => response.data);
+};
+
 const addNewBlog = newBlog => {
   const config = {
     headers: { Authorization: token },
@@ -22,4 +33,4 @@ const addNewBlog = newBlog => {
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, addNewBlog, setToken };
+export default { getAll, addNewBlog, setToken, deleteBlog };
