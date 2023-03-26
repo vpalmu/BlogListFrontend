@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import blogService from '../services/blogs';
+import localStorage from '../services/localStorage';
 
 const Blog = ({ blog }) => {
 
@@ -7,6 +8,18 @@ const Blog = ({ blog }) => {
   const toggleVisibility = () => {
     setVisible(!visible);
   };
+
+  function CheckUserPermission() {
+    if (blog.user === undefined) return null;
+    if (blog.user === null) return null;
+    if (user.username !== blog.user.username) return null;
+
+    return true; // has permission
+  }
+
+  const user = localStorage.getUser();
+  const canDeleteBlog = CheckUserPermission();
+
 
   const deleteButtonClickHandler = async (blogId) => {
     console.log(`deleting blog with id: ${blogId}`);
@@ -27,7 +40,7 @@ const Blog = ({ blog }) => {
       <p>Url: { blog.url } </p>
       <p>Author: { blog.author } </p>
       { blog.user && <p>Added by: { blog.user.name }</p> }
-      <button onClick={() => deleteButtonClickHandler(blog.id)}>Delete</button>
+      { canDeleteBlog && <button onClick={() => deleteButtonClickHandler(blog.id)}>Delete</button> }
       <button onClick={toggleVisibility}>Close</button>
     </div>
   );
