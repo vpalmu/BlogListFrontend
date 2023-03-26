@@ -21,11 +21,11 @@ const Blog = ({ blog }) => {
   const canDeleteBlog = CheckUserPermission();
 
 
-  const deleteButtonClickHandler = async (blogId) => {
-    console.log(`deleting blog with id: ${blogId}`);
+  const deleteButtonClickHandler = async (blog) => {
+    console.log(`deleting blog with id: ${blog.id}`);
 
     try {
-      blogService.deleteBlog(blogId);
+      blogService.deleteBlog(blog);
       console.log('blog deleted !');
       window.location.reload(); // refresh the page
     } catch (exception) {
@@ -40,7 +40,7 @@ const Blog = ({ blog }) => {
       <p>Url: { blog.url } </p>
       <p>Author: { blog.author } </p>
       { blog.user && <p>Added by: { blog.user.name }</p> }
-      { canDeleteBlog && <button onClick={() => deleteButtonClickHandler(blog.id)}>Delete</button> }
+      { canDeleteBlog && <button onClick={() => deleteButtonClickHandler(blog)}>Delete</button> }
       <button onClick={toggleVisibility}>Close</button>
     </div>
   );

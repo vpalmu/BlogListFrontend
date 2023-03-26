@@ -12,12 +12,12 @@ const getAll = () => {
   return request.then(response => response.data);
 };
 
-const deleteBlog = blogId => {
+const deleteBlog = blog => {
   const config = {
     headers: { Authorization: token },
   };
 
-  const resourceUrl = `${baseUrl}/${blogId}`;
+  const resourceUrl = `${baseUrl}/${blog.id}`;
   console.log('resourceUrl:', resourceUrl);
   const request = axios.delete(resourceUrl, config);
   return request.then(response => response.data);
