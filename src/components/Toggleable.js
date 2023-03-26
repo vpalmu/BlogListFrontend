@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, forwardRef } from 'react';
+import PropTypes from 'prop-types';
 
-const Togglable = ({ toggleOnButtonLabel, toggleOffButtonLabel, children }) => {
+const Togglable = forwardRef((props, refs) => {
   const [visible, setVisible] = useState(false);
 
   const toggleOff = { display: visible ? 'none' : '' };
@@ -10,17 +11,23 @@ const Togglable = ({ toggleOnButtonLabel, toggleOffButtonLabel, children }) => {
     setVisible(!visible);
   };
 
+  Togglable.propTypes = {
+    toggleOnButtonLabel: PropTypes.string.isRequired,
+    toggleOffButtonLabel: PropTypes.string.isRequired
+  };
+
   return (
     <div>
       <div style={toggleOff}>
-        <button onClick={toggleVisibility}>{toggleOnButtonLabel}</button>
+        <button onClick={toggleVisibility}>{props.toggleOnButtonLabel}</button>
       </div>
       <div style={toggleOn}>
-        {children}
-        <button onClick={toggleVisibility}>{toggleOffButtonLabel}</button>
+        {props.children}
+        <button onClick={toggleVisibility}>{props.toggleOffButtonLabel}</button>
       </div>
     </div>
   );
-};
+});
+
 
 export default Togglable;
